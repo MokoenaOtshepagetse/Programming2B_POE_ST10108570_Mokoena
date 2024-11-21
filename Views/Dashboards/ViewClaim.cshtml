@@ -1,0 +1,86 @@
+﻿@model Claimed.Models.Claim
+
+@{
+    ViewData["Title"] = "View Claim";
+}
+
+<h2>Claim Details</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HourlyRate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HourlyRate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.HoursWorked)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.HoursWorked) hours
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateSubmitted)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateSubmitted)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateReviewed)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.DateReviewed.HasValue)
+            {
+                @Html.DisplayFor(model => model.DateReviewed)
+            }
+            else
+            {
+                    <span>Not reviewed yet</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SupportingDocument)
+        </dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.SupportingDocument))
+            {
+                    <a href="@Url.Content(Model.SupportingDocument)" target="_blank">View Document</a>
+            }
+            else
+            {
+                    <span>No document provided</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.User.Username)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Username)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.ClaimId" class="btn btn-secondary">Edit</a>
+</div>

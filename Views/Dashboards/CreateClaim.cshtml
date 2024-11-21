@@ -1,0 +1,68 @@
+﻿<!-- CreateClaim.cshtml -->
+@model Claim
+
+<form id="create-claim-form" asp-action="CreateClaim">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Course" class="control-label"></label>
+        <input asp-for="Course" class="form-control" id="course-input" />
+        <span asp-validation-for="Course" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control" id="description-input"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="HourlyRate" class="control-label"></label>
+        <input asp-for="HourlyRate" class="form-control" id="hourly-rate-input" />
+        <span asp-validation-for="HourlyRate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="HoursWorked" class="control-label"></label>
+        <input asp-for="HoursWorked" class="form-control" id="hours-worked-input" />
+        <span asp-validation-for="HoursWorked" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create Claim" class="btn btn-primary" />
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        // Validate form data using jQuery
+        $('#create-claim-form').submit(function (event) {
+            event.preventDefault();
+
+            var course = $('#course-input').val();
+            var description = $('#description-input').val();
+            var hourlyRate = $('#hourly-rate-input').val();
+            var hoursWorked = $('#hours-worked-input').val();
+
+            if (course === '' || description === '' || hourlyRate === '' || hoursWorked === '') {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Calculate claim amount using ClaimCalculator
+            var claimCalculator = new ClaimCalculator();
+            var claimAmount = claimCalculator.calculateClaimAmount(hourlyRate, hoursWorked);
+
+            // Submit form data to server
+            $.ajax({
+                type: 'POST',
+                url: '/Claims/CreateClaim',
+                data: {
+                    Course: course,
+                    Description: description,
+                    HourlyRate: hourlyRate,
+                    HoursWorked: hoursWorked,
+                    ClaimAmount: claimAmount
+                },
+                success: function (data) {
+                    // Handle successful submission
+                }
+            });
+        });
+    });
+</script>

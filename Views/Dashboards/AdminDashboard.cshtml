@@ -1,0 +1,81 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h2>Admin Dashboard</h2>
+<p>Welcome to the Admin Dashboard!</p>
+
+<h3>Pending Claims</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Claim ID</th>
+            <th>User</th>
+            <th>Course</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var claim in Model.PendingClaims)
+        {
+                <tr>
+                    <td>@claim.ClaimId</td>
+                    <td>@claim.User.UserName</td>
+                    <td>@claim.Course</td>
+                    <td>@claim.Description</td>
+                    <td>
+                        <a href="#" class="btn btn-success approve-claim" data-claim-id="@claim.ClaimId">Approve</a>
+                        <a href="#" class="btn btn-danger reject-claim" data-claim-id="@claim.ClaimId">Reject</a>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.approve-claim').click(function (e) {
+                    e.preventDefault();
+                    var claimId = $(this).data('claim-id');
+
+                    $.ajax({
+                        url: '@Url.Action("ApproveClaim", "Claims")', // URL to the ApproveClaim action
+                        method: 'POST',
+                        data: { claimId: claimId },
+                        success: function (response) {
+                            // Handle success response
+                            alert("Claim approved successfully!");
+                            // Optionally, you can reload the page or update the claim's status in the UI
+                        },
+                        error: function () {
+                            // Handle error response
+                            alert("Error approving claim.");
+                        }
+                    });
+                });
+
+                $('.reject-claim').click(function (e) {
+                    e.preventDefault();
+                    var claimId = $(this).data('claim-id');
+
+                    $.ajax({
+                        url: '@Url.Action("RejectClaim", "Claims")', // URL to the RejectClaim action
+                        method: 'POST',
+                        data: { claimId: claimId },
+                        success: function (response) {
+                            // Handle success response
+                            alert("Claim rejected successfully!");
+                        },
+                        error: function () {
+                            // Handle error response
+                            alert("Error rejecting claim.");
+                        }
+                    });
+                });
+            });
+        </script>
+}

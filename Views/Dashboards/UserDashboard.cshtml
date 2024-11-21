@@ -1,0 +1,81 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "User Dashboard";
+}
+
+<h2>User Dashboard</h2>
+<p>Welcome to the User Dashboard!</p>
+
+<h3>Your Claims</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Claim ID</th>
+            <th>Course</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Date Submitted</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="claimsTableBody">
+        @foreach (var claim in Model.Claims)
+        {
+                <tr data-claim-id="@claim.ClaimId">
+                    <td>@claim.ClaimId</td>
+                    <td>@claim.Course</td>
+                    <td>@claim.Description</td>
+                    <td id="status_@claim.ClaimId">@claim.Status</td>
+                    <td>@claim.DateSubmitted.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a href="#" class="btn btn-primary view-claim">View</a>
+                        <a href="#" class="btn btn-secondary edit-claim">Edit</a>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("CreateClaim", "Claims")" class="btn btn-primary">Create New Claim</a>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script> <!-- Include jQuery if not already included -->
+    <script src="~/lib/signalr/signalr.min.js"></script>
+    <script>
+            $(document).ready(function () {
+                    const claimsTableBody = $('#claimsTableBody');
+                    const connection = new signalR.HubConnectionBuilder()
+                        .withUrl("/claimHub")
+                        .build();
+
+                    connection.on('UpdateClaimStatus', (claimId, newStatus) => {
+                        const statusElement = $(`#status_${claimId}`);
+                        if (statusElement.length) {
+                            statusElement.text(newStatus);
+                        }
+                    });
+        $(document).ready(function () {
+                connection.start().then(() => {
+                        console.log('Connected to SignalR hub.');
+                    }).catch(error => {
+                        console.error('Failed to connect to SignalR hub:', error);
+                    });
+            // Event handler for View button
+            $('.view-claim').click(function (e) {
+                e.preventDefault();
+                var claimId = $(this).closest('tr').data('claim-id');
+
+                // Redirect to the ViewClaim action with the claimId
+                window.location.href = '@Url.Action("ViewClaim", "Claims")' + '/' + claimId;
+            });
+
+            // Event handler for Edit button
+            $('.edit-claim').click(function (e) {
+                e.preventDefault();
+                var claimId = $(this).closest('tr').data('claim-id');
+
+                // Redirect to the EditClaim action with the claimId
+                window.location.href = '@Url.Action("EditClaim", "Claims")' + '/' + claimId;
+            });
+    </script>
+}

@@ -1,0 +1,43 @@
+﻿@model Claimed.Models.Invoice
+
+@{
+    ViewData["Title"] = "Invoice";
+}
+
+<h2>Invoice</h2>
+
+<div>
+    <h4>Invoice Details</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.InvoiceNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.InvoiceNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.InvoiceDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.InvoiceDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaimId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ClaimId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalAmount)
+        </dd>       
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    <a asp-action="PrintInvoice" asp-route-id="@Model.Id" class="btn btn-secondary">Print Invoice</a>
+</div>
